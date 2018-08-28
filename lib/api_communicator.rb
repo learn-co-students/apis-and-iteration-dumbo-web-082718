@@ -2,12 +2,27 @@ require 'rest-client'
 require 'json'
 require 'pry'
 
+def make_request(url)
+  response_string = RestClient.get(url)
+  JSON.parse(response_string)
+end
+
 def get_character_movies_from_api(character)
   #make the web request
-  response_string = RestClient.get('http://www.swapi.co/api/people/')
-  response_hash = JSON.parse(response_string)
-  
-  # NOTE: in this demonstration we name many of the variables _hash or _array. 
+  # response_string = RestClient.get('http://www.swapi.co/api/people/')
+  # response_hash = JSON.parse(response_string)
+  response_hash = make_request('http://www.swapi.co/api/people/')
+
+  response_hash["results"].each do |person|
+
+    if character == person["name"]
+      return person["films"]
+    end
+  end
+
+
+
+  # NOTE: in this demonstration we name many of the variables _hash or _array.
   # This is done for educational purposes. This is not typically done in code.
 
 
@@ -22,14 +37,26 @@ def get_character_movies_from_api(character)
   #  of movies by title. play around with puts out other info about a given film.
 end
 
-def print_movies(films_hash)
+
+
+def print_movies(films_array)
   # some iteration magic and puts out the movies in a nice list
+  array_of_hashes = []
+  films_array.each do |film_url|
+    # response_string = RestClient.get(film_url)
+    # response_hash = JSON.parse(response_string)
+    # array_of_hashes << response_hash
+    array_of_hashes << make_request(film_url)
+  end
+  puts array_of_hashes
 end
+
 
 def show_character_movies(character)
   films_array = get_character_movies_from_api(character)
   print_movies(films_array)
 end
+
 
 ## BONUS
 
