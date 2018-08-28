@@ -41,14 +41,14 @@ end
 
 def print_movies(films_array)
   # some iteration magic and puts out the movies in a nice list
-  array_of_hashes = []
+  titles_array = []
   films_array.each do |film_url|
     # response_string = RestClient.get(film_url)
     # response_hash = JSON.parse(response_string)
     # array_of_hashes << response_hash
-    array_of_hashes << make_request(film_url)
+    titles_array << make_request(film_url)["title"]
   end
-  puts array_of_hashes
+  puts titles_array
 end
 
 
